@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    
+  </head>
+  <body style="background-image:url('img1.jpg');background-repeat: no-repeat;background-attachment: fixed; background-size: cover;">
+
+  <br>
+  <br>
+  <br>
+  <center>
+    <div class="input-container">
+<div class="form">
+  <div class="container">
+    <div class="gradient">
+      <div class="title">Welcome</div>
+      <div class="subtitle">Just remove image background!</div>
+      <div class="input-container ic1">
+        <input id="fileInput" class="input" type="file" placeholder=" " />
+        <div class="cut"></div>
+        <label for="Select a image" class="placeholder">Select a image</label>
+      </div>
+      <div class="input-container ic2">
+        <input id="upload" class="input"
+        type="button"  onclick="submitHandler()"
+        value="Upload">
+        <div class="cut cut-short"></div>
+        <label for="upload" class="placeholder">Upload</>
+      </div>
+      <button class="submit"
+         onclick="downloadFile()">
+         Download
+        </button>
+        
+    </div>
+  </div>
+</div>
+</div>
+  <br>
+  <br>
+  <script>
+    let imageURL;
+  
+    function submitHandler() {
+      const fileInput = document.getElementById('fileInput');
+      const image = fileInput.files[0];
+  
+      const formData = new FormData();
+      formData.append('image_file', image);
+      formData.append('size', 'auto');
+  
+      const apiKey = 'ZuiAimBhrjQhHDE5hciTYuLh';
+  
+      fetch('https://api.remove.bg/v1.0/removebg', {
+        method: 'POST',
+        headers: {
+          'X-Api-Key': apiKey
+        },
+        body: formData
+      })
+        .then(function (response) {
+          return response.blob();
+        })
+        .then(function (blob) {
+          const url = URL.createObjectURL(blob);
+          imageURL = url;
+  
+          const imageContainer = document.createElement('div');
+          imageContainer.classList.add('image-container');
+          document.querySelector('.form').appendChild(imageContainer);
+  
+          const img = document.createElement('img');
+          img.src = url;
+          imageContainer.appendChild(img);
+        })
+        .catch(function (error) {
+          console.error('Error:', error);
+        });
+    }
+  
+    function downloadFile() {
+      var a = document.createElement('a');
+      a.href = imageURL;
+      a.download = 'naciasv.png';
+      document.body.appendChild(a);
+  
+      a.click();
+  
+      document.body.removeChild(a);
+    }
+  </script>
+  
+  
+</center>
+  </body>
+  </html>
+  
